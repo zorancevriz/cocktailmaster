@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+   
+</head>
+<body>
+    
+    <script>
+ document.body.style.background = "linear-gradient(to right, yellow, red)";
+ 
+ var searchInput = document.createElement('input');
+searchInput.setAttribute('type', 'text');
+searchInput.setAttribute('id', 'searchInput');
+searchInput.setAttribute('placeholder', 'Search for a cocktail');
+document.body.appendChild(searchInput);
+var searchButton = document.createElement('button');
+searchButton.setAttribute('id', 'searchButton');
+searchButton.innerHTML = 'Search';
+document.body.appendChild(searchButton);
+var searchResult = document.createElement('div');
+searchResult.setAttribute('id', 'searchResult');
+document.body.appendChild(searchResult);
+var searchInput = document.getElementById('searchInput');
+var searchButton = document.getElementById('searchButton');
+var searchResult = document.getElementById('searchResult');
+searchButton.addEventListener('click', function () {
+  var searchInputValue = searchInput.value;
+  var url = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=' + searchInputValue;
+  fetch(url)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      var drinks = data.drinks;
+      var drink = drinks[0];
+      var drinkName = drink.strDrink;
+      var drinkImage = drink.strDrinkThumb;
+      var drinkIngredients = [];
+      for (var i = 1; i <= 15; i++) {
+        var ingredient = drink['strIngredient' + i];
+        if (ingredient) {
+          drinkIngredients.push(ingredient);
+        }
+      }
+      var drinkInstructions = drink.strInstructions;
+      var drinkCategory = drink.strCategory;
+      var drinkAlcoholic = drink.strAlcoholic;
+      var drinkGlass = drink.strGlass;
+      var drinkHTML = '<h2>' + drinkName + '</h2>';
+      drinkHTML += '<img src="' + drinkImage + '" alt="' + drinkName + '">';
+      drinkHTML += '<p>Ingredients: ' + drinkIngredients.join(', ') + '</p>';
+      drinkHTML += '<p>Instructions: ' + drinkInstructions + '</p>';
+      drinkHTML += '<p>Category: ' + drinkCategory + '</p>';
+      drinkHTML += '<p>Alcoholic: ' + drinkAlcoholic + '</p>';
+      drinkHTML += '<p>Glass: ' + drinkGlass + '</p>';
+      searchResult.innerHTML = drinkHTML;
+    });
+});
+
+/* with key enter */
+searchInput.addEventListener('keyup', function (event) {
+  if (event.keyCode === 13) {
+    searchButton.click();
+  }
+});
+/* put all conent in mid and make smaller result for 50 % */
+var searchResult = document.getElementById('searchResult');
+searchResult.style.textAlign = 'center';
+searchResult.style.borderRadius = '30px';
+searchResult.style.width = '50%';
+searchResult.style.margin = '0 auto';
+
+
+
+ 
+</script>
+
+
+
+
+
+
+ 
+</body>
+</html>
