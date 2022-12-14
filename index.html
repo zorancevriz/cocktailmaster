@@ -1,89 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 </head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J2J6Y66YFE"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-J2J6Y66YFE');
+  <meta name="google-site-verification" content="ph4yRKEyKZmflqo4TlTN5y4XCaX0ErDZVzF00Opo5rg" />
+</script>
+
 <style>
-  .flex-container {
-    display: flex;
-    background-color: #f1f1f1;
-    width:auto;
-    height:auto;
-  }
+ 
   
   
   </style>
   </head>
 <body>
-  <div class="flex-container">
+  
     <script>
-      document.body.style.background = "linear-gradient(to right, yellow, red)";
-      
-      var searchInput = document.createElement('input');
-     searchInput.setAttribute('type', 'text');
-     searchInput.setAttribute('id', 'searchInput');
-     searchInput.setAttribute('placeholder', 'Search for a cocktail');
-     document.body.appendChild(searchInput);
-     var searchButton = document.createElement('button');
-     searchButton.setAttribute('id', 'searchButton');
-     searchButton.innerHTML = 'Search';
-     document.body.appendChild(searchButton);
-     var searchResult = document.createElement('div');
-     searchResult.setAttribute('id', 'searchResult');
-     document.body.appendChild(searchResult);
-     var searchInput = document.getElementById('searchInput');
-     var searchButton = document.getElementById('searchButton');
-     var searchResult = document.getElementById('searchResult');
-     searchButton.addEventListener('click', function () {
-       var searchInputValue = searchInput.value;
-       var url = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=' + searchInputValue;
-       fetch(url)
-         .then(function (response) {
-           return response.json();
-         })
-         .then(function (data) {
-           var drinks = data.drinks;
-           var drink = drinks[0];
-           var drinkName = drink.strDrink;
-           var drinkImage = drink.strDrinkThumb;
-           var drinkIngredients = [];
-           for (var i = 1; i <= 15; i++) {
-             var ingredient = drink['strIngredient' + i];
-             if (ingredient) {
-               drinkIngredients.push(ingredient);
-             }
-           }
-           var drinkInstructions = drink.strInstructions;
-           var drinkCategory = drink.strCategory;
-           var drinkAlcoholic = drink.strAlcoholic;
-           var drinkGlass = drink.strGlass;
-           var drinkHTML = '<h2>' + drinkName + '</h2>';
-           drinkHTML += '<img src="' + drinkImage + '" alt="' + drinkName + '">';
-           drinkHTML += '<p>Ingredients: ' + drinkIngredients.join(', ') + '</p>';
-           drinkHTML += '<p>Instructions: ' + drinkInstructions + '</p>';
-           drinkHTML += '<p>Category: ' + drinkCategory + '</p>';
-           drinkHTML += '<p>Alcoholic: ' + drinkAlcoholic + '</p>';
-           drinkHTML += '<p>Glass: ' + drinkGlass + '</p>';
-           searchResult.innerHTML = drinkHTML;
-         });
-     });
-     
-     /* with key enter */
-     searchInput.addEventListener('keyup', function (event) {
-       if (event.keyCode === 13) {
-         searchButton.click();
-       }
-     });
-     /* put all conent in mid and make smaller result for 50 % */
-     var searchResult = document.getElementById('searchResult');
-     searchResult.style.textAlign = 'center';
-     searchResult.style.borderRadius = '30px';
-     searchResult.style.width = '50%';
-     searchResult.style.margin = '0 auto';
-     
-     
-     
-      
-     </script>
-     
+    /* bacgroundcolor lineragradient left to right #159957 #155799 */
+document.body.style.background = 'linear-gradient(to right, #159957, #155799)';
+
+/* make div class name header and put h1 enter name of cocktail */
+var header = document.createElement('div');
+header.className = 'header';
+document.body.appendChild(header);
+var h1 = document.createElement('h1');
+h1.innerHTML = 'Enter name of cocktail';
+header.appendChild(h1);
+
+/* center that div */
+header.style.textAlign = 'center';
+
+/* color white */
+header.style.color = 'white';
+
+/* make another div className resultHolder with input field, */
+var resultHolder = document.createElement('div');
+resultHolder.className = 'resultHolder';
+document.body.appendChild(resultHolder);
+var input = document.createElement('input');
+input.type = 'text';
+resultHolder.appendChild(input);
+
+/* center it and style it */
+resultHolder.style.textAlign = 'center';
+
+/* style that input field look nicely */
+input.style.width = '50%';
+input.style.height = '50px';
+input.style.fontSize = '20px';
+input.style.borderRadius = '10px';
+input.style.border = 'none';
+input.style.padding = '10px';
+input.style.marginTop = '20px';
+input.style.display ='block'
+
+/* when display from API result display under input field */
+input.addEventListener('keyup', function(event) {
+  if (event.keyCode === 13) {
+    var cocktailName = input.value;
+    var url = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=' + cocktailName;
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url);
+    xhr.send();
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        var response = JSON.parse(xhr.responseText);
+        var drink = response.drinks[0];
+        var img = document.createElement('img');
+        img.src = drink.strDrinkThumb;
+        resultHolder.appendChild(img);
+        var h2 = document.createElement('h2');
+        h2.innerHTML = drink.strDrink;
+        resultHolder.appendChild(h2);
+        var p = document.createElement('p');
+        p.innerHTML = drink.strInstructions;
+        resultHolder.appendChild(p);
+        var ul = document.createElement('ul');
+        resultHolder.appendChild(ul);
+        for (var i = 1; i < 16; i++) {
+          if (drink['strIngredient' + i]) {
+            var li = document.createElement('li');
+            li.innerHTML = drink['strIngredient' + i];
+            ul.appendChild(li);
+          }
+        }
+      }
+    };
+  }
+});
+/* after new input delete old one */
+input.addEventListener('keyup', function(event) {
+  if (event.keyCode === 13) {
+    while (resultHolder.firstChild) {
+      resultHolder.removeChild(resultHolder.firstChild);
+    }
+    resultHolder.appendChild(input);
+  }
+});
+
+
+</script>
   </div>
   
 
